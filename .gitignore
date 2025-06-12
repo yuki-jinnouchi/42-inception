@@ -1,18 +1,17 @@
-# Object files
-objs/
-*.o
+# Data
+.data/
 
-# Libraries
-*.a
+# Credentials
+secrets/
 
-# Executables
-*.out
+# Documets
+docs/
+
+#others
+*.pdf
 
 # on mac
 .DS_Store
 .vscode
 .github
 .devcontainer
-
-#project based
-cub3D
