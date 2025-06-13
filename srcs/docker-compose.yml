@@ -1,0 +1,109 @@
+# docker-compose.yml
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception_network
+    restart: always
+    depends_on:
+      - wordpress
+
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb/
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    secrets:
+      - db_root_password
+      - db_password
+    networks:
+      - inception_network
+    restart: always
+    env_file:
+      - .env
+
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    # ports:
+      # - "3306:3306"
+      # - "9000:9000"
+    volumes:
+      - wordpress_data:/var/www/html
+    secrets:
+      - db_root_password
+      - db_password
+      - wp_admin_password
+      - wp_user_password
+    networks:
+      - inception_network
+    restart: always
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+
+volumes:
+  wordpress_data:
+    name: wordpress_data
+    driver: local
+    driver_opts:
+      type: none
+      device: ../.data/wordpress
+      o: bind
+  mariadb_data:
+    name: mariadb_data
+    driver: local
+    driver_opts:
+      type: none
+      device: ../.data/mariadb
+      o: bind
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
+
+networks:
+  inception_network:
+    name: inception_network
+    driver: bridge
+
+# ftp:
+#   container_name: ftp
+#   build:
+#     context: ./bonus/ftp
+#     dockerfile: Dockerfile
+#   ports:
+#     - "21:21"
+#     - "20:20"
+#     - "30000-30009:30000-30009"
+#     - "40000-40005:40000-40005"
+#   volumes:
+#     - wordpress_data:/var/www/html
+#   networks:
+#     - inception_network
+#   restart: always
+#   depends_on:
+#     - wordpress
+#   env_file:
+#     - .env
