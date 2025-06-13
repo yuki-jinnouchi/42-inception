@@ -46,7 +46,21 @@ re: fclean all
 
 .PHONY: all up down stop start restart logs ps clean fclean re
 
-# チェック機構
+# make Secrets
+secrets:
+	@echo "Creating secrets directory..."
+	@mkdir -p secrets
+	@echo "Creating database root password..."
+	@test -f srcs/secrets/db_root_password.txt || echo "db_root_password" > srcs/secrets/db_root_password.txt
+	@echo "Creating database user password..."
+	@test -f srcs/secrets/db_password.txt || echo "db_password" > srcs/secrets/db_password.txt
+	@echo "Creating WordPress admin password..."
+	@test -f srcs/secrets/wp_admin_password.txt || echo "wp_admin_password" > srcs/secrets/wp_admin_password.txt
+	@echo "Creating WordPress user password..."
+	@test -f srcs/secrets/wp_user_password.txt || echo "wp_user_password" > srcs/secrets/wp_user_password.txt
+	@echo "Secrets created successfully."
+
+# Checking requirements
 check: check-requirements check-containers check-services check-network check-volumes
 
 check-requirements:
@@ -72,7 +86,7 @@ check-services:
 	@echo "- Checking HTTP redirect/block..."
 	@! curl -s -o /dev/null http://localhost:80 2>/dev/null || (echo "❌ HTTP should not be accessible" && exit 1)
 	@echo "- Checking WordPress..."
-	@curl -k -s https://localhost:443 | grep -q "WordPress\|wp-" || (echo "❌ WordPress not detected" && exit 1)
+	@curl -k -s -L https://localhost:443 | grep -q "WordPress\|wp-" || (echo "❌ WordPress not detected" && exit 1)
 	@echo "- Checking MariaDB connection..."
 	@docker compose -f $(DOCKER_COMPOSE_FILE) exec mariadb mariadb-admin -u root -p$$(cat secrets/db_root_password.txt) ping || (echo "❌ MariaDB not responding" && exit 1)
 	@echo "✅ All services working"
