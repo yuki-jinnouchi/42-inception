@@ -6,8 +6,6 @@ services:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    ports:
-      - "443:443"
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -39,9 +37,6 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    # ports:
-      # - "3306:3306"
-      # - "9000:9000"
     volumes:
       - wordpress_data:/var/www/html
     secrets:
@@ -61,17 +56,9 @@ volumes:
   wordpress_data:
     name: wordpress_data
     driver: local
-    driver_opts:
-      type: none
-      device: ../.data/wordpress
-      o: bind
   mariadb_data:
     name: mariadb_data
     driver: local
-    driver_opts:
-      type: none
-      device: ../.data/mariadb
-      o: bind
 
 secrets:
   db_root_password:

@@ -10,7 +10,7 @@ up:
 
 down:
 	@echo "Stopping $(NAME) containers..."
-	@docker compose -f $(DOCKER_COMPOSE_FILE) down
+	@docker compose -f $(DOCKER_COMPOSE_FILE) down -v
 
 stop:
 	@echo "Stopping $(NAME) containers..."
@@ -39,8 +39,7 @@ clean: down
 
 fclean: clean
 	@echo "Removing persistent volumes..."
-	@rm -rf $(DATA_DIR)/mariadb/*
-	@rm -rf $(DATA_DIR)/wordpress/*
+	@docker volume rm wordpress_data mariadb_data 2>/dev/null || true
 
 re: fclean all
 
