@@ -51,13 +51,13 @@ secrets:
 	@echo "Creating secrets directory..."
 	@mkdir -p secrets
 	@echo "Creating database root password..."
-	@test -f srcs/secrets/db_root_password.txt || echo "db_root_password" > srcs/secrets/db_root_password.txt
+	@test -f secrets/db_root_password.txt || echo "db_root_password" > srcs/secrets/db_root_password.txt
 	@echo "Creating database user password..."
-	@test -f srcs/secrets/db_password.txt || echo "db_password" > srcs/secrets/db_password.txt
+	@test -f secrets/db_password.txt || echo "db_password" > srcs/secrets/db_password.txt
 	@echo "Creating WordPress admin password..."
-	@test -f srcs/secrets/wp_admin_password.txt || echo "wp_admin_password" > srcs/secrets/wp_admin_password.txt
+	@test -f secrets/wp_admin_password.txt || echo "wp_admin_password" > srcs/secrets/wp_admin_password.txt
 	@echo "Creating WordPress user password..."
-	@test -f srcs/secrets/wp_user_password.txt || echo "wp_user_password" > srcs/secrets/wp_user_password.txt
+	@test -f secrets/wp_user_password.txt || echo "wp_user_password" > srcs/secrets/wp_user_password.txt
 	@echo "Secrets created successfully."
 
 # Checking requirements
