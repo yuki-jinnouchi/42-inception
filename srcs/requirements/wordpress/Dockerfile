@@ -1,54 +1,55 @@
-# Dockerfile for WordPress
+# Simplified WordPress Dockerfile for 42 Inception
 FROM alpine:3.22
 
-# Install necessary packages
+# Install PHP and necessary extensions in one layer
 RUN apk update && apk add --no-cache \
-    php \
-    php-fpm \
-    php-mysqli \
-    php-json \
-    php-curl \
-    php-dom \
-    php-exif \
-    php-fileinfo \
-    php-mbstring \
-    php-openssl \
-    php-xml \
-    php-zip \
-    php-gd \
+    php83 \
+    php83-fpm \
+    php83-mysqli \
+    php83-json \
+    php83-curl \
+    php83-dom \
+    php83-exif \
+    php83-fileinfo \
+    php83-mbstring \
+    php83-openssl \
+    php83-xml \
+    php83-zip \
+    php83-gd \
     curl \
-    mariadb-client
+    mariadb-client \
+    netcat-openbsd \
+    && rm -rf /var/cache/apk/*
 
-# Create wordpress user if not exists
-RUN addgroup -g 1000 wordpress 2>/dev/null || true \
-    && adduser -D -u 1000 -G wordpress wordpress 2>/dev/null || true
+# Create wordpress user and directories
+RUN addgroup -g 1000 wordpress \
+    && adduser -D -u 1000 -G wordpress wordpress \
+    && mkdir -p /run/php /var/www/html /var/log/php83 \
+    && chown -R wordpress:wordpress /run/php /var/www/html /var/log/php83
 
-# Configure PHP-FPM
-RUN mkdir -p /run/php
+# Copy PHP-FPM configuration
 COPY conf/www.conf /etc/php83/php-fpm.d/www.conf
 
-# Download WordPress
-RUN mkdir -p /var/www/html
+# Download and extract WordPress
 WORKDIR /var/www/html
+RUN curl -O https://wordpress.org/latest.tar.gz \
+    && tar -xzf latest.tar.gz --strip-components=1 \
+    && rm latest.tar.gz
 
-RUN curl -O https://wordpress.org/latest.tar.gz && \
-tar -xzf latest.tar.gz && \
-mv wordpress/* . && \
-rmdir wordpress && \
-rm latest.tar.gz
-
-# Copy configuration files
-COPY conf/wp-config.php /var/www/html/
-RUN chown -R wordpress:wordpress /var/www/html
-
-COPY tools/setup.sh .
+# Copy WordPress configuration and setup script with proper ownership
+COPY --chown=wordpress:wordpress conf/wp-config.php ./
+COPY --chown=wordpress:wordpress tools/setup.sh ./
 RUN chmod +x setup.sh
 
-# Expose port 9000 for PHP-FPM
+# Switch to non-root user
+USER wordpress
+
+# Expose PHP-FPM port
 EXPOSE 9000
 
-# # Set proper user
-# USER wordpress
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD php-fpm83 -t || exit 1
 
-# Start PHP-FPM
+# Start WordPress
 CMD ["./setup.sh"]
