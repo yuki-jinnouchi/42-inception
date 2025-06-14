@@ -39,7 +39,7 @@ rm latest.tar.gz
 
 # Copy configuration files
 COPY conf/wp-config.php /var/www/html/
-RUN chown -R nobody:nobody /var/www/html
+RUN chown -R wordpress:wordpress /var/www/html
 
 COPY tools/setup.sh .
 RUN chmod +x setup.sh
