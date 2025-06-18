@@ -50,13 +50,13 @@ secrets:
 	@echo "Creating secrets directory..."
 	@mkdir -p secrets
 	@echo "Creating database root password..."
-	@test -f secrets/db_root_password.txt || echo "db_root_password" > secrets/db_root_password.txt
+	@test -f secrets/db_root_password.txt || echo "pyPtWiyNc!-4th@" > secrets/db_root_password.txt
 	@echo "Creating database user password..."
-	@test -f secrets/db_password.txt || echo "db_password" > secrets/db_password.txt
+	@test -f secrets/db_password.txt || echo "@UJjuv4T4F2zt3ty" > secrets/db_password.txt
 	@echo "Creating WordPress admin password..."
-	@test -f secrets/wp_admin_password.txt || echo "wp_admin_password" > secrets/wp_admin_password.txt
+	@test -f secrets/wp_admin_password.txt || echo "d*Rzma2-uBLKeje2" > secrets/wp_admin_password.txt
 	@echo "Creating WordPress user password..."
-	@test -f secrets/wp_user_password.txt || echo "wp_user_password" > secrets/wp_user_password.txt
+	@test -f secrets/wp_user_password.txt || echo "88oR2FoU*mBtfqLP" > secrets/wp_user_password.txt
 	@echo "Secrets created successfully."
 
 # Checking requirements
