@@ -1,10 +1,9 @@
 NAME = inception
 DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
-DATA_DIR = .data
 
 all: up
 
-up:
+up: secrets
 	@echo "Starting $(NAME) containers..."
 	@docker compose -f $(DOCKER_COMPOSE_FILE) up -d --build
 
@@ -49,15 +48,35 @@ re: fclean all
 secrets:
 	@echo "Creating secrets directory..."
 	@mkdir -p secrets
+	@echo "Creating secrets files..."
+	@echo "Creating ubuntu user password..."
+	@test -f secrets/ubuntu_password.txt || echo "ubuntu_user_password" > secrets/ubuntu_user_password.txt
+	@echo "Creating NGINX admin password..."
+	@test -f secrets/nginx_admin_password.txt || echo "nginx_admin_password" > secrets/nginx_admin_password.txt
 	@echo "Creating database root password..."
-	@test -f secrets/db_root_password.txt || echo "pyPtWiyNc!-4th@" > secrets/db_root_password.txt
+	@test -f secrets/db_root_password.txt || echo "db_root_password" > secrets/db_root_password.txt
 	@echo "Creating database user password..."
-	@test -f secrets/db_password.txt || echo "@UJjuv4T4F2zt3ty" > secrets/db_password.txt
+	@test -f secrets/db_password.txt || echo "db_password" > secrets/db_password.txt
 	@echo "Creating WordPress admin password..."
-	@test -f secrets/wp_admin_password.txt || echo "d*Rzma2-uBLKeje2" > secrets/wp_admin_password.txt
+	@test -f secrets/wp_admin_password.txt || echo "wp_admin_password" > secrets/wp_admin_password.txt
 	@echo "Creating WordPress user password..."
-	@test -f secrets/wp_user_password.txt || echo "88oR2FoU*mBtfqLP" > secrets/wp_user_password.txt
+	@test -f secrets/wp_user_password.txt || echo "wp_user_password" > secrets/wp_user_password.txt
 	@echo "Secrets created successfully."
+
+vm_setup:
+	@echo "Setting up VM for Inception project..."
+	@echo "Check goinfre directory..."
+	@test -d /goinfre || (echo "❌ goinfre directory not found. Please create it." && exit 1)
+	@echo "Install Ubuntu with VM..."
+	@sh ./srcs/requirements/tools/startup_vm.sh
+	@echo "VM started. Complete the Ubuntu installation."
+	@sh ./srcs/requirements/tools/setup_vm.sh
+	@echo "VM setup complete."
+
+vm_delete:
+	@echo "Deleting VM..."
+	@sh ./srcs/requirements/tools/delete_vm.sh
+	@echo "VM deleted."
 
 # Checking requirements
 check: check-requirements check-containers check-services check-network check-volumes
