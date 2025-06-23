@@ -68,14 +68,14 @@ vm_setup:
 	@echo "Check goinfre directory..."
 	@test -d /goinfre || (echo "❌ goinfre directory not found. Please create it." && exit 1)
 	@echo "Install Ubuntu with VM..."
-	@sh ./srcs/requirements/tools/startup_vm.sh
+	@sh ./srcs/requirements/tools/startup_vm_debian.sh
 	@echo "VM started. Complete the Ubuntu installation."
-	@sh ./srcs/requirements/tools/setup_vm.sh
+	@sh ./srcs/requirements/tools/setup_vm_debian.sh
 	@echo "VM setup complete."
 
 vm_delete:
 	@echo "Deleting VM..."
-	@sh ./srcs/requirements/tools/delete_vm.sh
+	@sh ./srcs/requirements/tools/delete_vm_debian.sh
 	@echo "VM deleted."
 
 # Checking requirements
