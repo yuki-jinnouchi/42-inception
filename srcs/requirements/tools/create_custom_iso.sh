@@ -7,7 +7,7 @@ echo "   🔄 Creating custom Debian ISO..."
 
 # Check required parameters
 if [ "$#" -ne 6 ]; then
-    echo "Usage: $0 <ORIGINAL_ISO> <CUSTOM_ISO> <PRESEED_TEMPLATE> <ISOLINUX_TEMPLATE> <DEBIAN_PASSWORD> <WORK_DIR>"
+    echo "Usage: $0 <ORIGINAL_ISO> <CUSTOM_ISO> <PRESEED_TEMPLATE> <ISOLINUX_TEMPLATE> <DEBIAN_USER_PASSWORD> <WORK_DIR>"
     exit 1
 fi
 
@@ -15,7 +15,7 @@ ORIGINAL_ISO="$1"
 CUSTOM_ISO="$2"
 PRESEED_TEMPLATE="$3"
 ISOLINUX_TEMPLATE="$4"
-DEBIAN_PASSWORD="$5"
+DEBIAN_USER_PASSWORD="$5"
 WORK_DIR="$6"
 
 # Install required tools if missing
@@ -54,7 +54,7 @@ if [ ! -f "$PRESEED_TEMPLATE" ]; then
     echo "   ❌ Error: Preseed template not found: $PRESEED_TEMPLATE"
     exit 1
 fi
-sed "s/{{DEBIAN_PASSWORD}}/$DEBIAN_PASSWORD/g" "$PRESEED_TEMPLATE" > "$PRESEED_FILE"
+sed "s/{{DEBIAN_USER_PASSWORD}}/$DEBIAN_USER_PASSWORD/g" "$PRESEED_TEMPLATE" > "$PRESEED_FILE"
 
 # Modify isolinux.cfg for automatic installation
 echo "   Modifying boot configuration..."

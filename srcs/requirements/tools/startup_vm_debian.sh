@@ -28,12 +28,12 @@ ISO_URL="https://cdimage.debian.org/cdimage/archive/11.11.0/amd64/iso-dvd/debian
 
 ### Password Setup
 echo "📋 Setting up credentials..."
-if [ ! -s "$SECRETS_DIR/debian_password.txt" ]; then
+if [ ! -s "$SECRETS_DIR/debian_user_password.txt" ]; then
     echo "   Generating Debian password..."
-    openssl rand -base64 12 > "$SECRETS_DIR/debian_password.txt"
+    openssl rand -base64 12 > "$SECRETS_DIR/debian_user_password.txt"
 fi
-DEBIAN_PASSWORD=$(cat "$SECRETS_DIR/debian_password.txt")
-echo "   ✅ Password ready: $DEBIAN_PASSWORD"
+DEBIAN_USER_PASSWORD=$(cat "$SECRETS_DIR/debian_user_password.txt")
+echo "   ✅ Password ready: $DEBIAN_USER_PASSWORD"
 
 
 ### Download Original ISO
@@ -71,11 +71,11 @@ else
     elif [ "$ISOLINUX_TEMPLATE" -nt "$CUSTOM_ISO" ]; then
         echo "   Dependency changed: $(basename "$ISOLINUX_TEMPLATE")"
         REBUILD_ISO=true
-    elif [ ! -f "$SECRETS_DIR/debian_password.txt" ]; then
-        echo "   ❌ Dependency missing: $(basename "$SECRETS_DIR/debian_password.txt")"
+    elif [ ! -f "$SECRETS_DIR/debian_user_password.txt" ]; then
+        echo "   ❌ Dependency missing: $(basename "$SECRETS_DIR/debian_user_password.txt")"
         exit 1
-    elif [ "$SECRETS_DIR/debian_password.txt" -nt "$CUSTOM_ISO" ]; then
-        echo "   Dependency changed: $(basename "$SECRETS_DIR/debian_password.txt")"
+    elif [ "$SECRETS_DIR/debian_user_password.txt" -nt "$CUSTOM_ISO" ]; then
+        echo "   Dependency changed: $(basename "$SECRETS_DIR/debian_user_password.txt")"
         REBUILD_ISO=true
     elif [ ! -f "$ORIGINAL_ISO" ]; then
         echo "   ❌ Dependency missing: $(basename "$ORIGINAL_ISO")"
@@ -93,7 +93,7 @@ else
     WORK_DIR="$GOINFRE_DIR/iso_work"
     if ! "$VMTOOLS_DIR/create_custom_iso.sh" \
         "$ORIGINAL_ISO" "$CUSTOM_ISO" "$PRESEED_TEMPLATE" \
-        "$ISOLINUX_TEMPLATE" "$DEBIAN_PASSWORD" "$WORK_DIR"; then
+        "$ISOLINUX_TEMPLATE" "$DEBIAN_USER_PASSWORD" "$WORK_DIR"; then
         echo "   ❌ Error: Failed to create custom ISO"
         exit 1
     fi

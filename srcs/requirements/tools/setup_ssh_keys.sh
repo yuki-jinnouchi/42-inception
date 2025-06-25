@@ -24,11 +24,11 @@ if [ ! -f "$VM_KEY_PRIVATE" ] || [ ! -f "$VM_KEY_PUBLIC" ]; then
 fi
 
 # Get VM password for initial setup
-if [ ! -f "$SECRETS_DIR/debian_password.txt" ]; then
-    echo "❌ Error: Debian password file not found: $SECRETS_DIR/debian_password.txt"
+if [ ! -f "$SECRETS_DIR/debian_user_password.txt" ]; then
+    echo "❌ Error: Debian password file not found: $SECRETS_DIR/debian_user_password.txt"
     exit 1
 fi
-DEBIAN_PASSWORD=$(cat "$SECRETS_DIR/debian_password.txt")
+DEBIAN_USER_PASSWORD=$(cat "$SECRETS_DIR/debian_user_password.txt")
 
 ### Setup SSH key authentication
 echo "📋 Setting up key-based authentication using existing Git key..."
@@ -57,14 +57,14 @@ fi
 
 # Copy public key to VM (this will require manual password entry once)
 echo "   Setting up authorized_keys..."
-echo "   Password: $DEBIAN_PASSWORD"
+echo "   Password: $DEBIAN_USER_PASSWORD"
 
 # First, test if SSH key authentication already works
 if ssh -i "$VM_KEY_PRIVATE" -o StrictHostKeyChecking=no -o PasswordAuthentication=no -p $SSH_PORT $SSH_USER@$SSH_HOST "echo 'SSH key already configured'" 2>/dev/null; then
     echo "   ✅ SSH key authentication already working"
 else
     echo "   Setting up SSH key authentication..."
-    echo "   💡 You will be prompted for the VM password ONCE: $DEBIAN_PASSWORD"
+    echo "   💡 You will be prompted for the VM password ONCE: $DEBIAN_USER_PASSWORD"
 
     # Try ssh-copy-id with force option first
     if ssh-copy-id -f -i "$VM_KEY_PUBLIC" -p $SSH_PORT $SSH_USER@$SSH_HOST 2>/dev/null; then
@@ -73,7 +73,7 @@ else
         echo "   ⚠️  ssh-copy-id failed, trying manual method..."
 
         # Manual method as fallback
-        echo "   Please enter VM password when prompted: $DEBIAN_PASSWORD"
+        echo "   Please enter VM password when prompted: $DEBIAN_USER_PASSWORD"
         ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST \
             "mkdir -p ~/.ssh && chmod 700 ~/.ssh" && \
         cat "$VM_KEY_PUBLIC" | ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST \

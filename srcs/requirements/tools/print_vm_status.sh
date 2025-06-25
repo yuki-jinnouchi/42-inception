@@ -25,10 +25,10 @@ VM_OSTYPE=$(vboxmanage showvminfo "$VM_NAME" --machinereadable | grep "^ostype="
 # Get password if available
 ROOT_DIR="$(pwd)"
 SECRETS_DIR="$ROOT_DIR/secrets"
-if [ -f "$SECRETS_DIR/debian_password.txt" ]; then
-    DEBIAN_PASSWORD=$(cat "$SECRETS_DIR/debian_password.txt")
+if [ -f "$SECRETS_DIR/debian_user_password.txt" ]; then
+    DEBIAN_USER_PASSWORD=$(cat "$SECRETS_DIR/debian_user_password.txt")
 else
-    DEBIAN_PASSWORD="(not available)"
+    DEBIAN_USER_PASSWORD="(not available)"
 fi
 
 # Determine state icon and color
@@ -70,7 +70,7 @@ echo "   ISO: DVD Auto-Install (MINIMAL PACKAGES)"
 echo ""
 echo "🔐 Login Credentials:"
 echo "   Username: debian"
-echo "   Password: $DEBIAN_PASSWORD"
+echo "   Password: $DEBIAN_USER_PASSWORD"
 echo ""
 echo "🌐 Network Access (after installation):"
 echo "   SSH: ssh -p 2222 debian@localhost"

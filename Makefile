@@ -50,7 +50,7 @@ secrets:
 	@mkdir -p secrets
 	@echo "Creating secrets files..."
 	@echo "Creating ubuntu user password..."
-	@test -f secrets/ubuntu_password.txt || echo "ubuntu_user_password" > secrets/ubuntu_user_password.txt
+	@test -f secrets/ubuntu_password.txt || echo "debian_user_password" > secrets/debian_user_password.txt
 	@echo "Creating NGINX admin password..."
 	@test -f secrets/nginx_admin_password.txt || echo "nginx_admin_password" > secrets/nginx_admin_password.txt
 	@echo "Creating database root password..."
