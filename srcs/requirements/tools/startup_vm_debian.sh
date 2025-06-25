@@ -40,7 +40,7 @@ echo "   ✅ Password ready: $DEBIAN_PASSWORD"
 echo "📋 Preparing original Debian ISO..."
 if [ ! -f "$ORIGINAL_ISO" ]; then
     echo "   Downloading Debian 11 DVD ISO (penultimate stable version)..."
-    wget -c -N --progress=bar "$ISO_URL" -O "$ORIGINAL_ISO"
+    wget -c --progress=bar "$ISO_URL" -O "$ORIGINAL_ISO"
     echo "   ✅ ISO downloaded"
 else
     echo "   ✅ Original ISO already exists"

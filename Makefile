@@ -63,20 +63,25 @@ secrets:
 	@test -f secrets/wp_user_password.txt || echo "wp_user_password" > secrets/wp_user_password.txt
 	@echo "Secrets created successfully."
 
-vm_setup:
-	@echo "Setting up VM for Inception project..."
+vm_startup:
+	@echo "Starting VM for Inception project..."
 	@echo "Check goinfre directory..."
 	@test -d /goinfre || (echo "❌ goinfre directory not found. Please create it." && exit 1)
-	@echo "Install Ubuntu with VM..."
-	@sh ./srcs/requirements/tools/startup_vm_debian.sh
-	@echo "VM started. Complete the Ubuntu installation."
+	@echo "Creating and starting Debian VM..."
+	@bash ./srcs/requirements/tools/startup_vm_debian.sh
+	@echo "VM started."
+
+vm_setup:
+	@echo "Setting up VM..."
 	@sh ./srcs/requirements/tools/setup_vm_debian.sh
-	@echo "VM setup complete."
+	@echo "VM setup completed."
 
 vm_delete:
 	@echo "Deleting VM..."
 	@sh ./srcs/requirements/tools/delete_vm_debian.sh
 	@echo "VM deleted."
+
+.PHONY: secrets vm_startup vm_setup vm_delete
 
 # Checking requirements
 check: check-requirements check-containers check-services check-network check-volumes

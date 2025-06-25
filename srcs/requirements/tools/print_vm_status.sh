@@ -81,7 +81,33 @@ echo ""
 if [ "$VM_STATE" = "running" ]; then
     echo "🚀 VM Status: RUNNING"
     echo "   ✅ VM is currently active"
-    echo "   ✅ Ready for SSH access (if installation complete)"
+
+    # Test SSH connectivity
+    echo "   🔍 Testing SSH connectivity..."
+    if timeout 5 nc -z localhost 2222 2>/dev/null; then
+        echo "   ✅ SSH port 2222 is accessible"
+
+        # Test SSH configuration
+        SSH_TEST=$(timeout 10 ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -p 2222 debian@localhost "echo 'SSH_OK'" 2>/dev/null || echo "FAILED")
+        if [ "$SSH_TEST" = "SSH_OK" ]; then
+            echo "   ✅ SSH connection successful"
+
+            # Check SSH service status
+            SSH_SERVICE=$(timeout 10 ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -p 2222 debian@localhost "systemctl is-active ssh" 2>/dev/null || echo "unknown")
+            echo "   📡 SSH service status: $SSH_SERVICE"
+
+            # Check SSH configuration
+            SSH_CONFIG=$(timeout 10 ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -p 2222 debian@localhost "grep -E '^(Port|PasswordAuthentication|PubkeyAuthentication)' /etc/ssh/sshd_config 2>/dev/null | tr '\n' ' '" 2>/dev/null || echo "config check failed")
+            if [ "$SSH_CONFIG" != "config check failed" ]; then
+                echo "   ⚙️  SSH config: $SSH_CONFIG"
+            fi
+        else
+            echo "   ⚠️  SSH connection failed (installation may still be in progress)"
+        fi
+    else
+        echo "   ⚠️  SSH port not yet accessible (installation in progress)"
+    fi
+
     echo "   ✅ Monitor progress in VirtualBox GUI"
     echo ""
     echo "📝 Next steps:"
