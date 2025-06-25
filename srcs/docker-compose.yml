@@ -54,11 +54,17 @@ services:
 
 volumes:
   wordpress_data:
-    name: wordpress_data
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/data/wordpress
   mariadb_data:
-    name: mariadb_data
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/data/mariadb
 
 secrets:
   db_root_password:

@@ -1,9 +1,11 @@
 NAME = inception
 DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 
+DATA_DIR := ~/data/wordpress ~/data/mariadb
+
 all: up
 
-up: secrets
+up: secrets $(DATA_DIR)
 	@echo "Starting $(NAME) containers..."
 	@docker compose -f $(DOCKER_COMPOSE_FILE) up -d --build
 
@@ -29,6 +31,10 @@ logs:
 ps:
 	@docker compose -f $(DOCKER_COMPOSE_FILE) ps
 
+$(DATA_DIR):
+	@echo "Creating data directories..."
+	@mkdir -p $@
+
 clean: down
 	@echo "Removing project-specific containers, networks and images..."
 	@docker container prune -f
@@ -39,6 +45,9 @@ clean: down
 fclean: clean
 	@echo "Removing persistent volumes..."
 	@docker volume rm wordpress_data mariadb_data 2>/dev/null || true
+	@echo "Removing data directories..."
+	@chmod -R 777 ${DATA_DIR}
+	@rm -rf ${DATA_DIR}
 
 re: fclean all
 
@@ -75,6 +84,10 @@ vm_setup:
 	@echo "Setting up VM..."
 	@sh ./srcs/requirements/tools/setup_vm_debian.sh
 	@echo "VM setup completed."
+
+vm_ssh:
+	@echo "Connecting to VM via SSH..."
+	@sh ./srcs/requirements/tools/vm_ssh.sh || (echo "❌ SSH connection failed. Please check your VM setup." && exit 1)
 
 vm_delete:
 	@echo "Deleting VM..."

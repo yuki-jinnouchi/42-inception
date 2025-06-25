@@ -34,19 +34,7 @@ ssh -A -i "$VM_KEY_PRIVATE" -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$
 ### Clone project with Agent Forwarding
 echo "   Cloning Inception project..."
 ssh -A -i "$VM_KEY_PRIVATE" -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST \
-    "cd /home/debian && git clone git@vogsphere-v2.42tokyo.jp:vogsphere/intra-uuid-9e0b1fb3-9813-4502-a4e2-e1ef57a9af3f-6625474-yjinnouc inception"
-
-### Transfer secrets (not in git)
-echo "   Transferring secrets..."
-ROOT_DIR="$(pwd)"
-SECRETS_DIR="$ROOT_DIR/secrets"
-
-if [ -d "$SECRETS_DIR" ]; then
-    scp -i "$VM_KEY_PRIVATE" -o StrictHostKeyChecking=no -P $SSH_PORT -r "$SECRETS_DIR" $SSH_USER@$SSH_HOST:$PROJECT_DIR/
-    echo "   ✅ Secrets transferred"
-else
-    echo "   ⚠️  Secrets directory not found: $SECRETS_DIR"
-fi
+    "cd /home/debian && git clone git@vogsphere-v2.42tokyo.jp:vogsphere/intra-uuid-66687ad6-3e3b-46c8-9b41-794152c14da2-6646051-yjinnouc inception"
 
 ### Set up project permissions and environment
 echo "   Setting up project environment..."
@@ -77,7 +65,7 @@ echo "   Repository: VogSphere (42Tokyo)"
 echo "   Secrets: Transferred locally"
 echo ""
 echo "📝 Next steps:"
-echo "   ssh -A -i $VM_KEY_PRIVATE -p $SSH_PORT $SSH_USER@$SSH_HOST"
+echo "   sh $PROJECT_DIR/srcs/requirements/tools/vm_ssh.sh"
 echo "   cd $PROJECT_DIR"
 echo "   make up    # Start all services"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
