@@ -1,5 +1,5 @@
 # Simplified WordPress Dockerfile for 42 Inception
-FROM alpine:3.22
+FROM alpine:3.21
 
 # Install PHP and necessary extensions in one layer
 RUN apk update && apk add --no-cache \

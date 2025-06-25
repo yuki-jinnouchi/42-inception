@@ -1,5 +1,5 @@
 # Dockerfile for Nginx with SSL support
-FROM alpine:3.22
+FROM alpine:3.21
 
 # Install dependencies and clean cache in a single layer
 RUN apk update && apk add --no-cache \
