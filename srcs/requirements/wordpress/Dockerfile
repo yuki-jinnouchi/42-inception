@@ -22,7 +22,7 @@ RUN apk update && apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 # Install WP-CLI for WordPress automation
-RUN curl -o /usr/local/bin/wp-cli.phar https://github.com/wp-cli/wp-cli/releases/download/v2.10.0/wp-cli-2.10.0.phar \
+RUN curl -o /usr/local/bin/wp-cli.phar https://raw.githubusercontent.com/wp-cli/wp-cli/v2.10.0/phar/wp-cli.phar \
     && chmod +x /usr/local/bin/wp-cli.phar \
     && ln -s /usr/local/bin/wp-cli.phar /usr/local/bin/wp \
     && ln -sf /usr/bin/php83 /usr/bin/php
