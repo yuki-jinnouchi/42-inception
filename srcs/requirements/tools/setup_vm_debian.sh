@@ -58,7 +58,7 @@ echo "   ✅ VM is ready for setup"
 
 ### Step 1: Setup SSH Keys and Agent Forwarding
 echo ""
-echo "🔐 Step 1/3: Setting up SSH keys and Agent Forwarding..."
+echo "🔐 Setting up SSH keys and Agent Forwarding..."
 if [ -f "$VMTOOLS_DIR/scripts/setup_ssh_keys.sh" ]; then
     "$VMTOOLS_DIR/scripts/setup_ssh_keys.sh"
     if [ $? -eq 0 ]; then
@@ -74,7 +74,7 @@ fi
 
 ### Step 2: Install Docker and Docker Compose
 echo ""
-echo "🐋 Step 2/3: Installing Docker and Docker Compose..."
+echo "🐋 Installing Docker and Docker Compose..."
 if [ -f "$VMTOOLS_DIR/scripts/install_docker.sh" ]; then
     # Transfer and execute Docker installation
     VM_KEY_PRIVATE="$HOME/.ssh/id_rsa_42"
@@ -100,7 +100,7 @@ fi
 
 ### Step 3: Setup Git Project
 echo ""
-echo "📁 Step 3/3: Setting up Git project..."
+echo "📁 Setting up Git project..."
 if [ -f "$VMTOOLS_DIR/scripts/setup_gitproject.sh" ]; then
     "$VMTOOLS_DIR/scripts/setup_gitproject.sh"
     if [ $? -eq 0 ]; then
@@ -111,6 +111,23 @@ if [ -f "$VMTOOLS_DIR/scripts/setup_gitproject.sh" ]; then
     fi
 else
     echo "   ❌ setup_gitproject.sh not found"
+    exit 1
+fi
+
+### Step 4: Setup GUI Environment
+echo ""
+echo "🖥️ Setting up GUI environment..."
+if [ -f "$VMTOOLS_DIR/scripts/gui_setup.sh" ]; then
+    bash "$VMTOOLS_DIR/scripts/gui_setup.sh"
+    if [ $? -eq 0 ]; then
+        echo "   ✅ GUI environment setup successfully"
+        echo "   💡 GUI will be available after VM restart"
+    else
+        echo "   ❌ GUI environment setup failed"
+        exit 1
+    fi
+else
+    echo "   ❌ gui_setup.sh not found"
     exit 1
 fi
 
@@ -135,3 +152,10 @@ echo ""
 echo "🎉 VM Setup Complete!"
 echo "   WordPress: https://localhost:8443"
 echo "   Adminer: http://localhost:8080"
+echo "   GUI: Available after VM restart (auto-login enabled)"
+echo ""
+echo "💡 To access GUI and browse WordPress:"
+echo "   1. Restart VM to enable GUI"
+echo "   2. Open VirtualBox Manager GUI"
+echo "   3. Double-click on 'Debian-Inception' VM to open display"
+echo "   4. Firefox will be available for browsing https://yjinnouc.42.fr"

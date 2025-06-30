@@ -11,8 +11,8 @@ SSH_PORT="2222"
 SSH_USER="debian"
 SSH_HOST="localhost"
 VM_KEY_PRIVATE="$HOME/.ssh/id_rsa_42"
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-TOOLS_DIR="$ROOT_DIR/requirements/tools"
+ROOT_DIR="$(pwd)"
+VMTOOLS_DIR="$ROOT_DIR/srcs/requirements/tools"
 
 ### Prerequisites Check
 echo "📋 Prerequisites Check..."
@@ -55,31 +55,31 @@ fi
 
 ### Step 1: Install GUI Environment
 echo ""
-echo "🖥️  Step 1: Installing GUI Environment (XFCE4 + Firefox)"
+echo "🖥️ Installing GUI Environment (XFCE4 + Firefox)"
 echo "────────────────────────────────────────────────────────────────────────────────────"
 
-if [ -f "$TOOLS_DIR/install_gui_debian.sh" ]; then
+if [ -f "$VMTOOLS_DIR/scripts/install_gui_debian.sh" ]; then
     cd "$ROOT_DIR"
-    if bash "$TOOLS_DIR/install_gui_debian.sh"; then
+    if bash "$VMTOOLS_DIR/scripts/install_gui_debian.sh"; then
         echo "   ✅ GUI Environment installation completed"
     else
         echo "   ⚠️  GUI Environment installation had some issues but continuing..."
     fi
 else
-    echo "❌ install_gui_debian.sh not found"
+    echo "❌ install_gui_debian.sh not found at $VMTOOLS_DIR/scripts"
     exit 1
 fi
 
 ### Step 2: VirtualBox GUI Optimization
 echo ""
-echo "⚙️  Step 2: Optimizing VirtualBox for GUI Performance"
+echo "⚙️ Optimizing VirtualBox for GUI Performance"
 echo "────────────────────────────────────────────────────────────────────────────────────"
 
-if [ -f "$TOOLS_DIR/optimize_vm_gui.sh" ]; then
+if [ -f "$VMTOOLS_DIR/scripts/optimize_vm_gui.sh" ]; then
     cd "$ROOT_DIR"
-    bash "$TOOLS_DIR/optimize_vm_gui.sh"
+    bash "$VMTOOLS_DIR/scripts/optimize_vm_gui.sh"
 else
-    echo "❌ optimize_vm_gui.sh not found"
+    echo "❌ optimize_vm_gui.sh not found at $VMTOOLS_DIR/scripts/"
     exit 1
 fi
 
@@ -87,14 +87,14 @@ echo "   ✅ VirtualBox GUI optimization completed"
 
 ### Step 3: Setup Auto-login and Hosts Configuration
 echo ""
-echo "🔐 Step 3: Setting up Auto-login and Domain Configuration"
+echo "🔐 Setting up Auto-login and Domain Configuration"
 echo "────────────────────────────────────────────────────────────────────────────────────"
 
-if [ -f "$TOOLS_DIR/setup_gui_autologin.sh" ]; then
+if [ -f "$VMTOOLS_DIR/scripts/setup_gui_autologin.sh" ]; then
     cd "$ROOT_DIR"
-    bash "$TOOLS_DIR/setup_gui_autologin.sh"
+    bash "$VMTOOLS_DIR/scripts/setup_gui_autologin.sh"
 else
-    echo "❌ setup_gui_autologin.sh not found"
+    echo "❌ setup_gui_autologin.sh not found at $VMTOOLS_DIR/scripts/"
     exit 1
 fi
 
@@ -102,7 +102,7 @@ echo "   ✅ Auto-login and domain configuration completed"
 
 ### Step 4: Verify GUI Environment
 echo ""
-echo "🔍 Step 4: Verifying GUI Environment"
+echo "🔍 Verifying GUI Environment"
 echo "────────────────────────────────────────────────────────────────────────────────────"
 
 # Wait for services to stabilize
