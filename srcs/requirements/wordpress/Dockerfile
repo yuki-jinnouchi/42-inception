@@ -25,7 +25,7 @@ RUN apk update && apk add --no-cache \
 RUN curl -o /usr/local/bin/wp-cli.phar https://raw.githubusercontent.com/wp-cli/wp-cli/v2.10.0/phar/wp-cli.phar \
     && chmod +x /usr/local/bin/wp-cli.phar \
     && ln -s /usr/local/bin/wp-cli.phar /usr/local/bin/wp \
-    && ln -s /usr/bin/php83 /usr/bin/php
+    && ln -sf /usr/bin/php83 /usr/bin/php
 
 # Create wordpress user and directories
 RUN addgroup -g 1000 wordpress \
