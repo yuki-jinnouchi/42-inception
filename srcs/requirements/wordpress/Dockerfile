@@ -16,6 +16,7 @@ RUN apk update && apk add --no-cache \
     php83-xml \
     php83-zip \
     php83-gd \
+    php83-phar \
     curl \
     mariadb-client \
     netcat-openbsd \
