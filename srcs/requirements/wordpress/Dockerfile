@@ -21,6 +21,11 @@ RUN apk update && apk add --no-cache \
     netcat-openbsd \
     && rm -rf /var/cache/apk/*
 
+# Install WP-CLI for WordPress automation
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/wp-cli/v2.10.0/bin/wp \
+    && chmod +x /usr/local/bin/wp \
+    && ln -s /usr/bin/php83 /usr/bin/php
+
 # Create wordpress user and directories
 RUN addgroup -g 1000 wordpress \
     && adduser -D -u 1000 -G wordpress wordpress \
