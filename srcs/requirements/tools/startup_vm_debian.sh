@@ -2,28 +2,28 @@
 
 set -e
 
-# Debian VM Setup
+# VM Startup
 echo "🚀 Setting up Debian VM with ISO Remastering (ZERO manual intervention)..."
 
 ### Configuration
-# Directories and paths
 VM_NAME="Debian-Inception"
 
+# Directories and paths
 ROOT_DIR="$(pwd)"
 SECRETS_DIR="$ROOT_DIR/secrets"
 VMTOOLS_DIR="$ROOT_DIR/srcs/requirements/tools"
 
-PRESEED_TEMPLATE="$VMTOOLS_DIR/conf/preseed_template.cfg"
-ISOLINUX_TEMPLATE="$VMTOOLS_DIR/conf/isolinux_template.cfg"
-
+# VM directories
 GOINFRE_DIR="/goinfre/yjinnouc"
 VM_DIR="$GOINFRE_DIR/VMs/$VM_NAME"
 VM_PATH="$VM_DIR/$VM_NAME.vdi"
 
+# ISO and preseed configuration
+ISO_URL="https://cdimage.debian.org/cdimage/archive/11.11.0/amd64/iso-dvd/debian-11.11.0-amd64-DVD-1.iso"
 ORIGINAL_ISO="$GOINFRE_DIR/debian-11.11.0-amd64-DVD-1.iso"
 CUSTOM_ISO="$GOINFRE_DIR/debian-11.11.0-amd64-DVD-1-auto.iso"
-# Use DVD ISO for faster offline installation (Debian 11 Bullseye - penultimate stable version)
-ISO_URL="https://cdimage.debian.org/cdimage/archive/11.11.0/amd64/iso-dvd/debian-11.11.0-amd64-DVD-1.iso"
+ISOLINUX_TEMPLATE="$VMTOOLS_DIR/conf/isolinux_template.cfg"
+PRESEED_TEMPLATE="$VMTOOLS_DIR/conf/preseed_template.cfg"
 
 
 ### Password Setup
@@ -91,7 +91,7 @@ if [ "$REBUILD_ISO" = "false" ]; then
 else
     # Call external ISO creation script
     WORK_DIR="$GOINFRE_DIR/iso_work"
-    if ! "$VMTOOLS_DIR/create_custom_iso.sh" \
+    if ! "$VMTOOLS_DIR/scripts/create_custom_iso.sh" \
         "$ORIGINAL_ISO" "$CUSTOM_ISO" "$PRESEED_TEMPLATE" \
         "$ISOLINUX_TEMPLATE" "$DEBIAN_USER_PASSWORD" "$WORK_DIR"; then
         echo "   ❌ Error: Failed to create custom ISO"
@@ -159,4 +159,4 @@ vboxmanage startvm "$VM_NAME"
 sleep 2
 # Call the VM status script to display current information
 sh "$VMTOOLS_DIR/print_vm_status.sh" "$VM_NAME"
-echo "   ✅ VM started successfully"
+echo "🎉 VM started successfully"

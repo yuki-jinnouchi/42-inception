@@ -7,15 +7,18 @@ echo "🗑️  Cleaning up Debian VM..."
 
 ### Configuration
 VM_NAME="Debian-Inception"
-GOINFRE_DIR="/goinfre/yjinnouc"
-VM_DIR="$GOINFRE_DIR/VMs/$VM_NAME"
-VM_PATH="$VM_DIR/$VM_NAME.vdi"
+
+# Directories and paths
 ROOT_DIR="$(pwd)"
 VMTOOLS_DIR="$ROOT_DIR/srcs/requirements/tools"
 
+GOINFRE_DIR="/goinfre/yjinnouc"
+VM_DIR="$GOINFRE_DIR/VMs/$VM_NAME"
+VM_PATH="$VM_DIR/$VM_NAME.vdi"
+
 
 ### Stop VM
-echo "📋 Step 1: Stopping VM..."
+echo "📋 Stopping VM..."
 if vboxmanage list runningvms | grep -q "$VM_NAME"; then
     echo "   Stopping VM '$VM_NAME'..."
     vboxmanage controlvm "$VM_NAME" poweroff 2>/dev/null || true
@@ -31,9 +34,8 @@ else
     echo "   ✅ VM not running"
 fi
 
-
 ### Remove VM
-echo "📋 Step 2: Removing VM..."
+echo "📋 Removing VM..."
 if vboxmanage list vms | grep -q "$VM_NAME"; then
     echo "   Removing VM '$VM_NAME'..."
     vboxmanage unregistervm "$VM_NAME" --delete 2>/dev/null || true
@@ -43,7 +45,7 @@ else
 fi
 
 ### Clean up files
-echo "📋 Step 3: Cleaning up files..."
+echo "📋 Cleaning up files..."
 # Remove VDI file
 if [ -f "$VM_PATH" ]; then
     echo "   Removing VDI file: $VM_PATH"
@@ -65,7 +67,7 @@ if [ -f "$PRESEED_GENERATED" ]; then
 fi
 
 ### Stop HTTP server
-echo "📋 Step 4: Stopping HTTP server..."
+echo "📋 Stopping HTTP server..."
 if lsof -ti:8001 >/dev/null 2>&1; then
     echo "   Stopping HTTP server on port 8001..."
     kill $(lsof -ti:8001) 2>/dev/null || true
@@ -75,12 +77,4 @@ else
     echo "   ✅ HTTP server not running"
 fi
 
-echo ""
 echo "🎉 Cleanup Complete!"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "✅ All Debian VM resources have been cleaned up"
-echo "   • VM removed from VirtualBox"
-echo "   • VDI file deleted"
-echo "   • Generated files cleaned"
-echo "   • HTTP server stopped"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
