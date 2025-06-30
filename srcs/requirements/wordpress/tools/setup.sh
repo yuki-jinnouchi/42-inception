@@ -17,14 +17,12 @@ echo "MariaDB is ready!"
 # WordPress initialization with WP-CLI
 echo "Initializing WordPress..."
 
-# Set up proper permissions for WordPress
-chown -R wordpress:wordpress /var/www/html
-
 # Check WP-CLI installation
 if ! command -v wp > /dev/null; then
     echo "❌ WP-CLI not found. Installing..."
-    curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/wp-cli/v2.10.0/bin/wp
-    chmod +x /usr/local/bin/wp
+    curl -o /usr/local/bin/wp-cli.phar https://raw.githubusercontent.com/wp-cli/wp-cli/v2.10.0/phar/wp-cli.phar
+    chmod +x /usr/local/bin/wp-cli.phar
+    ln -s /usr/local/bin/wp-cli.phar /usr/local/bin/wp
 fi
 
 # Check if WordPress is installed
