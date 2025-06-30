@@ -94,11 +94,18 @@ vm_delete:
 	@sh ./srcs/requirements/tools/delete_vm_debian.sh
 	@echo "VM deleted."
 
+vm_restart:
+	@echo "Restarting VM to enable GUI..."
+	@VBoxManage controlvm "Debian-Inception" acpipowerbutton || true
+	@sleep 5
+	@VBoxManage startvm "Debian-Inception" --type headless
+	@echo "VM restarted. GUI should be available in VirtualBox GUI."
+
 gui_setup:
 	@echo "🖥️  Setting up GUI environment..."
-	@bash ./srcs/requirements/tools/gui_setup.sh
+	@bash ./srcs/requirements/tools/scripts/gui_setup.sh
 
-.PHONY: secrets vm_startup vm_setup vm_delete gui_setup
+.PHONY: secrets vm_startup vm_setup vm_delete vm_restart gui_setup
 
 # Checking requirements
 check: check-requirements check-containers check-services check-network check-volumes
