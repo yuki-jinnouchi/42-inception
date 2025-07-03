@@ -60,3 +60,5 @@ Access the application at `https://localhost` or your configured domain.
 - [Docker Documentation](https://docs.docker.com/)
 - [Docker Compose Reference](https://docs.docker.com/compose/)
 - [NGINX Configuration Guide](https://nginx.org/en/docs/)
+- [\[Lv5\]Inception｜syamashi (note)](https://note.com/syamashi/n/ndb5655f55ef8)
+- [DockerでWordpress構築ハンズオン | 42 Inception (zenn)](https://zenn.dev/justhiro/articles/c454cc1fbc784e)
