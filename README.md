@@ -38,7 +38,7 @@ If VM is prepared, run this
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/yuki-jinnouchi/42-inception
 cd inception
 
 # Build and start all services
@@ -52,6 +52,7 @@ make fclean      # Full cleanup including volumes
 ```
 
 Access the application at `https://localhost` or your configured domain.
+
 (If VM is prepared, `https://yjinnouc.42.fr` will be redirected to `https://localhost`)
 
 ## Reference
